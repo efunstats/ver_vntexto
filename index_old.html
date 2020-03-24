@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-16">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test 1</title>
+    <link rel="stylesheet" type="text/css" href="estilos.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light" id="boton">    
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="mostrar_text('TA-PB1_EN.txt')">TA-PB1_EN</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="mostrar_text('TA-PB2_EN.txt')">TA-PB2_EN</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="mostrar_text('TA-PB3_EN.txt')">TA-PB3_EN</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="mostrar_text('TA-PB4_EN.txt')">TA-PB4_EN</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="mostrar_text('TA-PB5_EN.txt')">TA-PB5_EN</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="mostrar_text('TA-PB6_EN.txt')">TA-PB6_EN</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="siguiente()">siguiente</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" onclick="atras()">atras</button>
+    <h1 id='pagina'></h1>
+    </nav>
+    <div id="texto">
+
+    </div>
+    <script>
+        var numero1 = 0
+        var numero2 = 39
+        var pagina = 0 
+        trackname = [];
+        pagina_actual = []; 
+        var texto_total = document.getElementById("texto")       
+        var num_pag = document.getElementById("pagina")    
+        function obtener_txt(nombre_text){
+            ruta = "text/"+nombre_text
+            //document.getElementById("novelas_txt").onchange = 
+            
+            // fetch(this.value)
+            fetch(ruta)
+            .then(response => response.arrayBuffer())
+            .then(buffer => {
+                let decoder = new TextDecoder("utf-16");
+                let text = decoder.decode(buffer);
+                // console.log(text);
+
+            // .then(data=> data.text())
+            // .then(data=>{
+                
+                var keyword=text.toString();
+                trackname = keyword.split("\n"); 
+                
+            })
+        
+        }
+        function mostrar_text(nombre_text){
+            obtener_txt(nombre_text)
+            num_pag.innerHTML = `${pagina+1}`
+            pagina = pagina + 1
+            for(var linea in trackname.slice(numero1,numero2)){
+                // console.log(trackname[linea]);
+                trackname2 = trackname[linea].split("|*|");
+                // console.log(trackname2[2]);
+                texto_total.innerHTML += `<p>`+`${trackname2[1]}`+`  |   `+`${trackname2[2]}`+`</p>`                 
+            }
+            numero1 = numero1+40
+            numero2 = numero2+40
+        }
+        function siguiente(){
+            num_pag.innerHTML =''
+            num_pag.innerHTML = `${pagina+1}`
+            pagina = pagina + 1
+            texto_total.innerHTML =``
+            pagina_actual = trackname.slice(numero1,numero2)
+            for(var linea in pagina_actual){
+                // console.log(trackname[linea]);
+                trackname2 = pagina_actual[linea].split("|*|");
+                // console.log(trackname2[2]);
+                
+                texto_total.innerHTML += `<p>`+`${trackname2[1]}`+`  |   `+`${trackname2[2]}`+`</p>`
+            }
+            numero1 = numero1+40
+            numero2 = numero2+40
+        }
+        function atras(){
+            num_pag.innerHTML =''
+            num_pag.innerHTML = `${pagina - 1}`
+            pagina = pagina - 1            
+            texto_total.innerHTML =``
+            pagina_actual = trackname.slice(numero1,numero2)
+            for(var linea in pagina_actual){
+                // console.log(trackname[linea]);
+                trackname2 = pagina_actual[linea].split("|*|");
+                // console.log(trackname2[2]);
+                
+                texto_total.innerHTML += `<p>`+`${trackname2[1]}`+`  |   `+`${trackname2[2]}`+`</p>`
+            }
+            numero1 = numero1-40
+            numero2 = numero2-40
+        }
+    </script>
+
+</body>
+</html>
